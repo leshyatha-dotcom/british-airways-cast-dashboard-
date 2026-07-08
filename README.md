@@ -1,52 +1,61 @@
-# British Airways Passenger CSAT Dashboard
+# British Airways Customer Satisfaction (CSAT) Dashboard
 
-## Project Overview
-This project analyzes British Airways passenger satisfaction survey data to uncover patterns in customer experience across service categories, aircraft types, seat classes, traveller types, and geographic regions. The goal was to build an interactive Tableau dashboard that allows stakeholders (Flight Operations, Maintenance, and Business Analyst teams) to explore CSAT (Customer Satisfaction) data and identify actionable insights for improving flight operations.
+Tableau dashboards analyzing British Airways customer reviews to uncover satisfaction drivers, segment-level differences, and recommendations for improving customer experience.
 
-This was completed as part of a Data Analytics internship project with Labmentix.
+## Business Objective
+
+To analyze British Airways customer review data and identify the key drivers of customer satisfaction across service categories, traveller segments, and cabin classes — enabling data-driven recommendations to improve overall customer experience and recommendation rate.
 
 ## Business Problem
-British Airways collects large volumes of customer feedback through surveys covering categories such as overall rating, seat comfort, cabin staff service, food, ground service, value for money, and entertainment. The goal of this dashboard is to:
-- Detect patterns in passenger satisfaction and dissatisfaction
-- Support flight operations decisions using CSAT data segmented by aircraft, seat type, and traveller type
-- Provide an interactive, filterable view for non-technical stakeholders
 
-## Datasets
-- **ba_reviews.csv** — Individual passenger reviews with ratings across 7 service categories (~[X] rows)
-- **Countries.csv** — Reference table mapping country, region, and continent, used for geographic visualization
+British Airways collects large volumes of customer reviews covering overall satisfaction and specific service categories (seat comfort, cabin staff, food & beverages, entertainment, ground service, and value for money), but this feedback is not consolidated into an actionable view. Without a clear picture of:
+- which service areas underperform,
+- which customer segments are least satisfied, and
+- how satisfaction connects to whether customers would recommend the airline,
 
-The two datasets are connected via a relationship on `Place` (ba_reviews) and `Country` (Countries).
-
-## Tools Used
-- **Tableau Desktop / Tableau Public** — dashboard build and visualization
-- **Data cleaning** — handled within Tableau (data type correction, geographic role assignment)
+it is difficult for BA to prioritize where to invest in service improvements.
 
 ## Data Preparation
-- Assigned `Place` a Geographic Role (Country/Region) to enable map plotting
-- Set correct aggregation (Average) for all rating measures
-- Connected `ba_reviews.csv` and `Countries.csv` via relationship (Place = Country)
 
-## Dashboard Components
-1. **Summary KPI Cards** — Average rating across 7 categories: Overall Rating, Cabin Staff Service, Entertainment, Food & Beverages, Ground Service, Seat Comfort, and Value for Money
-2. **Interactive Map** — Country-level average rating, color-coded (dark blue = higher satisfaction, red/pink = lower satisfaction)
-3. **Filters** — Aircraft, Traveller Type, and Seat Type, allowing users to drill down into specific segments
-4. **Trend Line Chart** — Average rating by month, showing satisfaction trends over time
-5. **Aircraft Rating Bar Chart** — Average rating broken down by aircraft type
+- **Source:** BA customer reviews dataset (`ba_reviews.csv`) joined with `Countries.csv` for geographic analysis
+- **Total reviews analyzed:** 1,324
+- **Data cleaning:** The 7 sub-category rating fields (Seat Comfort, Cabin Staff Service, Food & Beverages, Entertainment, Ground Service, Value For Money, and Overall Rating) contained placeholder values of **-1**, representing "not rated." These were excluded from all average calculations using calculated fields (e.g., `Rating Cleaned`, `Seat Comfort Cleaned`) to prevent them from artificially deflating KPI averages.
+- **Scale note:** The overall `Rating` field uses a 1–10 scale, while the six sub-category fields use a 1–5 scale — this distinction was preserved during cleaning to avoid incorrectly truncating valid data.
+- Aircraft names contained inconsistent/combined entries (e.g., multiple aircraft types merged into a single field); this is noted as a data limitation rather than corrected, to preserve the original record integrity.
 
-## Key Insights
-- **Declining satisfaction over time**: Average rating has trended downward from around 7.0 in 2015 to approximately 2.5–4.0 in recent years, suggesting a need to investigate service quality changes over time.
-- **Category-level gaps**: Overall Rating (4.19) scores notably higher than categories like Entertainment (1.4), indicating in-flight entertainment as a potential area for improvement.
-- **Aircraft-level variation**: Average ratings vary by aircraft type, which may reflect differences in cabin configuration, age of aircraft, or crew assignment.
-- **Geographic spread**: Reviews span 200+ countries, with a visible concentration of both reviews and lower ratings in specific regions, useful for route-level investigation.
+## Dashboards
 
-## Known Data Limitations
-- The `Aircraft` field contains inconsistent entries (e.g., combined values like "A319/Boeing 787-8"), which affects the granularity of the aircraft-level analysis. These were not deep-cleaned in this iteration to preserve authenticity of the raw survey data.
+**Dashboard 1 — Satisfaction Overview**
+KPI cards for all 7 rating categories, a world map of review density and average rating, a monthly satisfaction trend line, and average ratings by aircraft type.
+
+**Dashboard 2 — Customer Segments**
+Recommendation split (Yes/No), average rating by traveller type (Business, Solo Leisure, Couple Leisure, Family Leisure), and average rating by seat type (Economy, Premium Economy, Business, First).
+
+## Insights
+
+- **Overall satisfaction:** Average rating is **4.19 / 10**, indicating more customers report negative experiences than positive ones.
+- **Weakest service categories:** Entertainment (2.72/5) and Food & Beverages (2.66/5) score lowest among sub-categories, while Cabin Staff Service (3.32/5) scores highest.
+- **Recommendation rate:** Only **56.8%** of reviewers would recommend British Airways, while **43.2%** would not — a meaningful gap given the overall rating is below the midpoint of its scale.
+- **Traveller type differences:** Business travellers report the highest average satisfaction (4.19), while Family Leisure travellers report the lowest (3.80) among segments analyzed.
+- **Seat type differences:** Economy Class (4.36) and Premium Economy (4.22) passengers report comparatively higher satisfaction than other cabin classes in this dataset.
+- **Trend:** Monthly average ratings fluctuate between 3.0 and 5.0 across the year, with no single sustained period of improvement or decline — suggesting satisfaction issues are systemic rather than seasonal.
+
+## Business Recommendations
+
+1. **Prioritize in-flight entertainment and food & beverage improvements** — these are the two lowest-rated service categories and the most direct levers for closing the gap between overall rating and recommendation rate.
+2. **Investigate the Family Leisure segment specifically** — this group reports the lowest satisfaction; targeted research (e.g., family-friendly seating, entertainment content, meal options) could improve retention within this segment.
+3. **Treat the 43.2% "would not recommend" group as a churn-risk segment** — follow-up surveys or service recovery outreach to this group could help identify root causes not captured in numeric ratings.
+4. **Use Cabin Staff Service as a service benchmark** — since it is the highest-rated category, examine what training or process differences contribute to its performance and apply learnings to lower-scoring categories.
+5. **Continue monitoring trend data monthly** — the lack of a clear seasonal pattern suggests operational or service-consistency issues rather than one-off events, warranting ongoing tracking rather than a single corrective action.
+
+## Conclusion
+
+This analysis shows that British Airways' overall customer satisfaction, while moderate, is held back primarily by in-flight entertainment and food & beverage service, with Family Leisure travellers representing the most at-risk segment. With just over half of customers willing to recommend the airline, targeted improvements in the identified weak areas — supported by continued monitoring — offer the clearest path to improving both satisfaction scores and word-of-mouth recommendation rates.
+
+## Tools Used
+
+- **Tableau Public** — dashboard design and data visualization
+- **Data cleaning** — calculated fields for handling missing/placeholder values
+- Dataset joined with country-level reference data for geographic analysis
 
 ## Files in This Repository
-- `BA_CSAT_Dashboard.twbx` — Packaged Tableau workbook (data + dashboard)
-- `README.md` — This documentation file
-
-## Author
-Leshyatha
-B.Tech CSE, Sasi Institute of Technology and Engineering
-Data Analytics Intern, Labmentix
